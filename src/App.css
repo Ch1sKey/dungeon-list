@@ -1,5 +1,5 @@
-.App {
-  text-align: center;
+body {
+  background-color: #282c34;
 }
 
 .App-logo {
@@ -12,18 +12,6 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 .App-link {
   color: #61dafb;
 }
@@ -35,4 +23,58 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+main {
+  padding: 15px;
+  color: #fff;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.radio-group .ant-radio-wrapper span{
+  color: #fff;
+}
+
+.filters .ant-slider-mark-text {
+  color: #fff;
+}
+
+.filters {
+  padding: 0 30px;
+}
+
+.filters__row:first-child {
+  margin-top: 0;
+}
+
+.filters__row {
+  margin-top: 20px;
+}
+
+.filters__filter-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.spell-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-flow: row;
+  gap: 5px 10px;
+}
+
+
+.spell-list-container {
+  position: relative;
+}
+
+.spell-list-container .spells-counter {
+  position: absolute;
+  right: 20px;
+  top: -15px;
+  color: #fff;
 }

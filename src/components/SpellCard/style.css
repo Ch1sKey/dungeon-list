@@ -1,0 +1,27 @@
+.spell-item {
+  display: flex;
+  /* padding: 5px 8px; */
+  /* border: 2px solid grey; */
+  border-radius: 15px; 
+}
+
+.spell-item .spell-item__link {
+  display: flex;
+  gap: 8px;
+  color: inherit;
+}
+
+.spell-item .spell-item__link:hover {
+  text-decoration: underline;
+}
+
+.spell-item__concentraion-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.spell-item__school__image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
