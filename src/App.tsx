@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { Radio, Row, Col, Slider, Select } from "antd";
+import { Radio, Row, Col, Slider, Select, Input } from "antd";
+import { FixedSizeGrid as Grid } from "react-window";
 import { intersection } from "lodash";
 import classic_spells from "./data/spells.json";
 import ISpell from "./common/interfaces/ISpell";
@@ -75,11 +76,16 @@ const SOURCES_LIST = Array.from(new Set(spells.map((spell) => spell.paramsData.s
   value: item,
 }));
 
+const clamp = (result: number, min: number, max: number) => {
+  return result < min ? min : result > max ? max : result;
+}
+
 function App() {
   const [displayName, setDisplayName] = useState<"cyrillic" | "latin">("cyrillic");
   const [sortType, setSortType] = useState<"name" | "level" | null>(null);
   const [levelRange, setLevelRange] = useState<[number, number]>([0, 10]);
   const [concentrationValue, setConcentrationValue] = useState<string>("");
+  const [textSearchValue, setTextSearchValue] = useState<string>("");
   const [classesList, setClassesList] = useState<string[]>([]);
   const [schoolsList, setSchoolsList] = useState<string[]>([]);
   const [sourcesList, setSourcesList] = useState<string[]>([]);
@@ -101,11 +107,25 @@ function App() {
       const schoolsFilter = schoolsList.length === 0 || schoolsList.includes(spell.paramsData.school);
       const sourcesFilter = sourcesList.length === 0 || sourcesList.includes(spell.paramsData.source);
 
+      const textFilterReg = new RegExp(textSearchValue.toLocaleLowerCase(), "g");
+      const textFilter =
+        textSearchValue === "" || displayName === "cyrillic"
+          ? !!spell.cyrillicName.toLocaleLowerCase().match(textFilterReg)
+          : !!spell.latinName.toLocaleLowerCase().match(textFilterReg);
+
       const hasConcentration = !!spell.paramsData.duration.match(/концентрация/gim);
       let concentrationFilter = true;
       if (concentrationValue === "require") concentrationFilter = hasConcentration;
       if (concentrationValue === "no-require") concentrationFilter = !hasConcentration;
-      return levelFilter && classesFilter && schoolsFilter && sourcesList && sourcesFilter && concentrationFilter;
+      return (
+        levelFilter &&
+        classesFilter &&
+        schoolsFilter &&
+        sourcesList &&
+        sourcesFilter &&
+        concentrationFilter &&
+        textFilter
+      );
     });
 
     if (!sortType) return spellList;
@@ -114,7 +134,7 @@ function App() {
     } else {
       return spellList.sort(abcSort);
     }
-  }, [sortType, displayName, levelRange, classesList, schoolsList, sourcesList, concentrationValue]);
+  }, [sortType, displayName, levelRange, classesList, schoolsList, sourcesList, concentrationValue, textSearchValue]);
 
   return (
     <div className="App">
@@ -206,14 +226,33 @@ function App() {
               />
             </Col>
           </Row>
+          <Row className="filters__row">
+            <Col span={24}>
+              <Input
+                suffix={null}
+                value={textSearchValue}
+                onChange={(e) => setTextSearchValue(e.target.value)}
+                placeholder="input search text"
+              />
+            </Col>
+          </Row>
         </div>
         <Row className="spell-list-container">
           <div className="spells-counter">{listOfSpells.length} spells</div>
-          <ul className="spell-list">
-            {listOfSpells.map((item) => (
-              <SpellCardItem spell={item} displayName={displayName} />
-            ))}
-          </ul>
+          <Grid
+            columnCount={4}
+            columnWidth={380}
+            height={600}
+            itemData={listOfSpells}
+            rowCount={clamp(Math.ceil(listOfSpells.length / 4), 1, 500)}
+            rowHeight={40}
+            width={1800}
+          >
+            {({ ...props }) => <SpellCardItem {...props} displayName={displayName} />}
+          </Grid>
+          {/* <ul className="spell-list">
+
+          </ul> */}
         </Row>
       </main>
     </div>

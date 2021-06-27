@@ -16,7 +16,9 @@ import illusion from "../../assets/schools/illusion.png";
 import capatalizeFirstLetter from "../../common/helpers/capatalizeFirstLetter";
 
 interface SpellCardProps {
-  spell: ISpell;
+  data: ISpell[];
+  columnIndex: number;
+  rowIndex: number;
   displayName: "latin" | "cyrillic";
 }
 
@@ -35,11 +37,12 @@ const getSchoolIcon = (schoolName: string) => {
   );
 };
 
-const SpellCardItem = ({ spell, displayName, ...rest }: SpellCardProps) => {
+const SpellCardItem = ({ data, rowIndex, columnIndex, displayName, ...rest }: SpellCardProps) => {
+  const spell = data?.[rowIndex * 4 + columnIndex];
   const getSpellNameToDisplay = (spell: ISpell) =>
     (displayName === "latin" ? spell.latinName : spell.cyrillicName) ?? spell.title;
-  const isRequireContentration = !!spell.paramsData.duration.match(/концентрация/gim);
-
+  const isRequireContentration = !!spell?.paramsData.duration.match(/концентрация/gim);
+  if(!spell) return null;
   return (
     <li {...rest} className="spell-item" key={spell.id}>
       <a className="spell-item__link" href={spell.paramsData.originLink} target="_blank" rel="noreferrer">
