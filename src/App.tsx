@@ -1,12 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { Radio, Row, Col, Slider, Select, Input } from "antd";
-import { FixedSizeGrid as Grid } from "react-window";
 import { intersection } from "lodash";
 import classic_spells from "./data/spells.json";
 import ISpell from "./common/interfaces/ISpell";
 import "./App.css";
-import SpellCardItem from "./components/SpellCard/SpellCardItem";
-import capatalizeFirstLetter from "./common/helpers/capatalizeFirstLetter";
+import SpellsGrid from "./components/SpellsGrid/SpellsGrid";
+import { capatalizeFirstLetter } from "./common/helpers/utils";
 
 const spells = [...classic_spells];
 
@@ -76,13 +75,9 @@ const SOURCES_LIST = Array.from(new Set(spells.map((spell) => spell.paramsData.s
   value: item,
 }));
 
-const clamp = (result: number, min: number, max: number) => {
-  return result < min ? min : result > max ? max : result;
-}
-
 function App() {
   const [displayName, setDisplayName] = useState<"cyrillic" | "latin">("cyrillic");
-  const [sortType, setSortType] = useState<"name" | "level" | null>(null);
+  const [sortType, setSortType] = useState<"name" | "level" | null>("level");
   const [levelRange, setLevelRange] = useState<[number, number]>([0, 10]);
   const [concentrationValue, setConcentrationValue] = useState<string>("");
   const [textSearchValue, setTextSearchValue] = useState<string>("");
@@ -109,9 +104,9 @@ function App() {
 
       const textFilterReg = new RegExp(textSearchValue.toLocaleLowerCase(), "g");
       const textFilter =
-        textSearchValue === "" || displayName === "cyrillic"
-          ? !!spell.cyrillicName.toLocaleLowerCase().match(textFilterReg)
-          : !!spell.latinName.toLocaleLowerCase().match(textFilterReg);
+          textSearchValue === "" ||
+          !!spell.cyrillicName.toLocaleLowerCase().match(textFilterReg) ||
+          !!spell.latinName.toLocaleLowerCase().match(textFilterReg);
 
       const hasConcentration = !!spell.paramsData.duration.match(/концентрация/gim);
       let concentrationFilter = true;
@@ -145,6 +140,7 @@ function App() {
               <p className="filters__filter-title">Sort by: </p>
               <Radio.Group
                 className="radio-group"
+                name="radio-sort-by"
                 value={sortType}
                 onChange={(e) => setSortType(e.target.value)}
                 optionType="default"
@@ -155,6 +151,7 @@ function App() {
               <p className="filters__filter-title">Name language: </p>
               <Radio.Group
                 className="radio-group"
+                name="radio-language"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 optionType="default"
@@ -239,17 +236,10 @@ function App() {
         </div>
         <Row className="spell-list-container">
           <div className="spells-counter">{listOfSpells.length} spells</div>
-          <Grid
-            columnCount={4}
-            columnWidth={380}
-            height={600}
-            itemData={listOfSpells}
-            rowCount={clamp(Math.ceil(listOfSpells.length / 4), 1, 500)}
-            rowHeight={40}
-            width={1800}
-          >
-            {({ ...props }) => <SpellCardItem {...props} displayName={displayName} />}
-          </Grid>
+          <SpellsGrid
+            displayName={displayName}
+            listOfSpells={listOfSpells}
+          />
           {/* <ul className="spell-list">
 
           </ul> */}

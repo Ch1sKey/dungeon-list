@@ -1,0 +1,2 @@
+export const capatalizeFirstLetter = (str: string) => str[0].toUpperCase() + str.slice(1);
+export const clamp = (result: number, min: number, max: number) => result < min ? min : result > max ? max : result;

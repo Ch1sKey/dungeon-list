@@ -13,7 +13,7 @@ import evocation from "../../assets/schools/evocation.png";
 import necromancy from "../../assets/schools/necromancy.png";
 import transmutation from "../../assets/schools/transmutation.png";
 import illusion from "../../assets/schools/illusion.png";
-import capatalizeFirstLetter from "../../common/helpers/capatalizeFirstLetter";
+import { capatalizeFirstLetter } from "../../common/helpers/utils";
 
 interface SpellCardProps {
   data: ISpell[];

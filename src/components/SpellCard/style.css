@@ -2,17 +2,28 @@
   display: flex;
   /* padding: 5px 8px; */
   /* border: 2px solid grey; */
-  border-radius: 15px; 
+  border-radius: 15px;
+  padding-left: 4px;
+  padding-top: 4px;
+
+
 }
 
 .spell-item .spell-item__link {
   display: flex;
+  align-items: center;
+  /* box-sizing: content-box; */
+  padding: 4px 4px;
   gap: 8px;
   color: inherit;
 }
 
 .spell-item .spell-item__link:hover {
   text-decoration: underline;
+}
+
+.spell-item__link:focus {
+  outline: 2px solid blue;
 }
 
 .spell-item__concentraion-icon {
