@@ -41,8 +41,6 @@ const SpellCardItem = ({ data, rowIndex, columnIndex, displayName, ...rest }: Sp
   const spell = data?.[rowIndex * 4 + columnIndex];
   const getSpellNameToDisplay = (spell: ISpell) =>
     (displayName === "latin" ? spell.latinName : spell.cyrillicName) ?? spell.title;
-  const getSpellNameToTooltip = (spell: ISpell) => 
-  (displayName === "latin" ? spell.cyrillicName : spell.latinName) ?? spell.title;
   const isRequireContentration = !!spell?.paramsData.duration.match(/концентрация/gim);
   if(!spell) return null;
   return (
@@ -58,7 +56,7 @@ const SpellCardItem = ({ data, rowIndex, columnIndex, displayName, ...rest }: Sp
             />
           </Tooltip>
         </div>
-        <Tooltip title={getSpellNameToTooltip(spell)}>
+        <Tooltip title={`${spell.cyrillicName} [${spell.latinName}]`}>
           <div>{getSpellNameToDisplay(spell)}</div>
         </Tooltip>
         {isRequireContentration ? (

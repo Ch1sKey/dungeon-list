@@ -11,6 +11,7 @@
 
 .spell-item .spell-item__link {
   display: flex;
+  font-size: 16px;
   align-items: center;
   /* box-sizing: content-box; */
   padding: 4px 4px;
@@ -33,7 +34,7 @@
 }
 
 .spell-item__school__image {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
 }

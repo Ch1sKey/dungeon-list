@@ -26,10 +26,10 @@ const SpellsGrid = ({ displayName, listOfSpells }: SpellsGridProps) => {
         className="spells-list"
         columnCount={currentWindowWidth / COLUMN_WIDTH}
         columnWidth={COLUMN_WIDTH}
-        height={600}
+        height={1200}
+        rowHeight={40}
         itemData={listOfSpells}
         rowCount={clamp(Math.ceil(listOfSpells.length / 4), 1, 500)}
-        rowHeight={40}
         width={currentWindowWidth}
   >
     {({ ...props }) => <SpellCardItem {...props} displayName={displayName} />}

@@ -77,7 +77,7 @@ const SOURCES_LIST = Array.from(new Set(spells.map((spell) => spell.paramsData.s
 
 function App() {
   const [displayName, setDisplayName] = useState<"cyrillic" | "latin">("cyrillic");
-  const [sortType, setSortType] = useState<"name" | "level" | null>("level");
+  const [sortType, setSortType] = useState<"name" | "level" | null>("name");
   const [levelRange, setLevelRange] = useState<[number, number]>([0, 10]);
   const [concentrationValue, setConcentrationValue] = useState<string>("");
   const [textSearchValue, setTextSearchValue] = useState<string>("");
@@ -240,9 +240,6 @@ function App() {
             displayName={displayName}
             listOfSpells={listOfSpells}
           />
-          {/* <ul className="spell-list">
-
-          </ul> */}
         </Row>
       </main>
     </div>
