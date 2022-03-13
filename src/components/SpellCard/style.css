@@ -23,7 +23,8 @@
 }
 
 .spell-item__link:focus {
-  outline: 2px solid blue;
+  outline: 4px solid #01aef4;
+  border-radius: 5px;
 }
 
 .spell-item__concentraion-icon {
