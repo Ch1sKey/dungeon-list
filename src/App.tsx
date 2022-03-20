@@ -2,10 +2,10 @@ import React, { useMemo, useState } from "react";
 import { Radio, Row, Col, Slider, Select, Input } from "antd";
 import { intersection } from "lodash";
 import classic_spells from "./data/spells.json";
-import ISpell from "./common/interfaces/ISpell";
 import "./App.css";
 import SpellsGrid from "./components/SpellsGrid/SpellsGrid";
 import { capatalizeFirstLetter } from "./common/helpers/utils";
+import ISpell from "./common/interfaces/ISpell";
 
 const spells = [...classic_spells];
 
@@ -45,6 +45,21 @@ const concentrationOptions = [
   },
 ];
 
+const ritualsOptions = [
+  {
+    label: "All",
+    value: "",
+  },
+  {
+    label: "Ritual",
+    value: "ritual",
+  },
+  {
+    label: "Not ritual",
+    value: "no-ritual",
+  },
+];
+
 const levelMarks = {
   0: "Cantrips",
   1: "1",
@@ -80,6 +95,7 @@ function App() {
   const [sortType, setSortType] = useState<"name" | "level" | null>("name");
   const [levelRange, setLevelRange] = useState<[number, number]>([0, 10]);
   const [concentrationValue, setConcentrationValue] = useState<string>("");
+  const [ritualValue, setRitualValue] = useState<string>("");
   const [textSearchValue, setTextSearchValue] = useState<string>("");
   const [classesList, setClassesList] = useState<string[]>([]);
   const [schoolsList, setSchoolsList] = useState<string[]>([]);
@@ -108,10 +124,14 @@ function App() {
           !!spell.cyrillicName.toLocaleLowerCase().match(textFilterReg) ||
           !!spell.latinName.toLocaleLowerCase().match(textFilterReg);
 
-      const hasConcentration = !!spell.paramsData.duration.match(/концентрация/gim);
+      const hasConcentration = spell.paramsData.requiresConcentration;
       let concentrationFilter = true;
       if (concentrationValue === "require") concentrationFilter = hasConcentration;
       if (concentrationValue === "no-require") concentrationFilter = !hasConcentration;
+
+      let ritualFilter = true;
+      if(ritualValue === "ritual") ritualFilter = spell.paramsData.isRitual;
+      if(ritualValue === "no-ritual") ritualFilter = !spell.paramsData.isRitual;
       return (
         levelFilter &&
         classesFilter &&
@@ -119,6 +139,7 @@ function App() {
         sourcesList &&
         sourcesFilter &&
         concentrationFilter &&
+        ritualFilter &&
         textFilter
       );
     });
@@ -129,7 +150,7 @@ function App() {
     } else {
       return spellList.sort(abcSort);
     }
-  }, [sortType, displayName, levelRange, classesList, schoolsList, sourcesList, concentrationValue, textSearchValue]);
+  }, [sortType, displayName, levelRange, classesList, schoolsList, sourcesList, textSearchValue, concentrationValue, ritualValue]);
 
   return (
     <div className="App">
@@ -198,7 +219,7 @@ function App() {
             </Col>
           </Row>
           <Row className="filters__row">
-            <Col span={24}>
+            <Col span={12}>
               <p className="filters__filter-title">Concentration: </p>
               <Radio.Group
                 className="radio-group"
@@ -206,6 +227,16 @@ function App() {
                 onChange={(e) => setConcentrationValue(e.target.value)}
                 optionType="default"
                 options={concentrationOptions}
+              />
+            </Col>
+            <Col span={12}>
+              <p className="filters__filter-title">Ritual: </p>
+              <Radio.Group
+                className="radio-group"
+                value={ritualValue}
+                onChange={(e) => setRitualValue(e.target.value)}
+                optionType="default"
+                options={ritualsOptions}
               />
             </Col>
           </Row>

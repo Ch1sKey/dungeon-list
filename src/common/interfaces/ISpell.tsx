@@ -9,6 +9,8 @@ export default interface ISpell {
     school: string;
     castlTime: string;
     distance: string;
+    requiresConcentration: boolean,
+    isRitual: boolean,
     components: string;
     duration: string;
     classes: string[];
